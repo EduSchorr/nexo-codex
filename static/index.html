@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#191c20">
+<meta name="description" content="Nexo — interface local para Codex">
+<link rel="icon" href="/nexo-mark.svg" type="image/svg+xml">
+<title>Nexo · Seu espaço</title>
+<link rel="stylesheet" href="/style.css">
+<script src="/app.js" defer></script>
+</head>
+<body>
+<aside id="sidebar">
+  <div class="brand"><img class="brand-icon" src="/nexo-mark.svg" alt=""><strong>Nexo</strong><span class="badge">LOCAL</span></div>
+  <button id="new" class="new">＋ Nova conversa <kbd>Ctrl K</kbd></button>
+  <label class="search">⌕ <input id="search" placeholder="Buscar conversas" aria-label="Buscar conversas"><kbd>Ctrl F</kbd></label>
+  <div class="list-heading">SUAS CONVERSAS <button id="refresh" title="Atualizar histórico">↻</button></div>
+  <div class="history-filters" role="group" aria-label="Filtrar conversas">
+    <button id="filter-all" aria-pressed="true">Todas</button>
+    <button id="filter-favorites" aria-pressed="false">★ Favoritas</button>
+    <button id="filter-archived" aria-pressed="false">Arquivo</button>
+  </div>
+  <small id="search-progress" class="search-progress" aria-live="polite"></small>
+  <nav id="threads" aria-label="Histórico"></nav>
+  <button id="more" hidden>Carregar mais</button>
+  <button id="account-open" class="account-brief" title="Abrir detalhes da conta">
+    <span class="account-brief-heading">◉ Conta e limites <span>↗</span></span>
+    <span id="account-brief-plan">Carregando conta…</span>
+    <span id="account-brief-limit">Consultando uso…</span>
+    <span class="mini-meter"><span id="account-brief-fill"></span></span>
+  </button>
+  <div class="mobile-thread-actions">
+    <button id="rename-mobile">✎ Renomear conversa</button>
+    <button id="export-mobile">↗ Exportar conversa</button>
+  </div>
+  <footer>
+    <span class="avatar">EU</span>
+    <div><strong>Meu espaço Nexo</strong><small id="connection">Conectando…</small></div>
+    <button id="theme" title="Alternar tema" aria-label="Alternar tema">◐</button>
+  </footer>
+</aside>
+
+<main>
+  <header>
+    <button id="menu" aria-label="Abrir ou fechar histórico">☰</button>
+    <div><strong id="title">Nova conversa</strong><small id="subtitle">Seu assistente, conectado ao computador</small></div>
+    <div class="header-actions">
+      <button id="autonomy" class="autonomy-pill" type="button" aria-pressed="false">◇ <span>Ativar autonomia</span></button>
+      <button id="power" class="power-pill" type="button" aria-pressed="true"><span id="power-dot">●</span><span id="power-label">Nexo ligado</span></button>
+      <button id="account-header" title="Conta e limites">◉ Conta</button>
+      <button id="rename">Renomear</button>
+      <button id="export">Exportar ↗</button>
+    </div>
+  </header>
+
+  <div id="autonomy-banner" class="autonomy-banner" hidden>
+    ◆ Autonomia ativa: pedidos de aprovação suportados serão aceitos automaticamente enquanto esta página estiver aberta.
+    <button id="autonomy-off">Desativar</button>
+  </div>
+
+  <div id="error" role="alert" hidden></div>
+
+  <section id="messages" aria-label="Mensagens">
+    <div id="welcome">
+      <div class="hero-ring"><img class="hero-logo" src="/nexo-mark.svg" alt="Nexo"></div>
+      <p class="eyebrow">SEU ESPAÇO PARA CRIAR</p>
+      <h1>O que vamos fazer hoje?</h1>
+      <p>Escolha como prefere começar. Seu histórico fica sempre por perto.</p>
+
+      <div class="mode-intro">
+        <button class="mode-card" data-mode="chat"><span class="mode-icon">◌</span><strong>Conversa</strong><small>Perguntas, ideias e textos. Sem mudanças nos arquivos.</small><span class="mode-card-link">Iniciar conversa →</span></button>
+        <button class="mode-card" data-mode="work"><span class="mode-icon">⌘</span><strong>Work</strong><small>Trabalhe com projetos e arquivos, com aprovações quando necessário.</small><span class="mode-card-link">Iniciar trabalho →</span></button>
+      </div>
+
+      <div class="suggestions">
+        <button data-prompt="Me ajude a organizar uma ideia em um plano de ação.">✧<strong>Explorar uma ideia</strong><small>Transforme o início em um plano</small></button>
+        <button data-prompt="Quero ajuda para entender um código. Vou enviar os detalhes.">⌘<strong>Trabalhar com código</strong><small>Entenda, construa e melhore</small></button>
+        <button data-prompt="Me ajude a organizar minhas tarefas de hoje.">☷<strong>Organizar meu dia</strong><small>Encontre um próximo passo</small></button>
+      </div>
+    </div>
+  </section>
+
+  <div class="composer-area">
+    <div id="requests"></div>
+    <div id="activity" aria-live="polite"></div>
+
+    <form id="composer">
+      <div class="composer-top">
+        <div class="mode-switch" role="group" aria-label="Tipo de conversa">
+          <button type="button" data-compose-mode="chat" aria-pressed="true">◌ Conversa</button>
+          <button type="button" data-compose-mode="work" aria-pressed="false">⌘ Work</button>
+        </div>
+        <span class="route-stack"><span id="mode-explain">Respostas sem editar arquivos</span><span id="route-preview">Seleção automática · avaliação local</span></span>
+      </div>
+
+      <div id="attachments" aria-label="Arquivos anexados"></div>
+      <input id="file-input" type="file" multiple hidden>
+      <textarea id="prompt" placeholder="Pergunte alguma coisa…" rows="2" aria-label="Sua mensagem"></textarea>
+
+      <div class="composer-bottom">
+        <button type="button" id="attach" class="attach" title="Anexar arquivos">＋ <span>Anexar</span></button>
+        <label class="folder">⌁ <input id="cwd" aria-label="Pasta de trabalho" title="Pasta para novas conversas"></label>
+        <select id="model" aria-label="Modelo"><option value="auto">Automático · econômico</option><option value="default">Padrão da conta</option></select>
+        <select id="effort" aria-label="Nível de raciocínio"><option value="auto">Raciocínio automático</option></select>
+        <button id="stop" type="button" hidden>■ Parar</button>
+        <button id="send" type="submit" aria-label="Enviar mensagem">↑</button>
+      </div>
+    </form>
+
+    <p class="hint">Enter para enviar · Shift + Enter para nova linha · Arquivos até 10 MB cada · Automático escolhe localmente sem consumir tokens extras</p>
+  </div>
+</main>
+
+<dialog id="account-dialog">
+  <div class="account-dialog-head"><div><span class="eyebrow">PAINEL DA CONTA</span><h2>Conta e utilização</h2></div><button id="account-close">×</button></div>
+  <div id="account-content"><p>Carregando dados da conta…</p></div>
+  <div class="account-dialog-foot"><button id="account-refresh">↻ Atualizar dados</button><span id="account-refreshed"></span></div>
+</dialog>
+
+<dialog id="rename-dialog">
+  <form method="dialog">
+    <h2>Renomear conversa</h2>
+    <input id="rename-value" required maxlength="160" aria-label="Nome da conversa">
+    <div><button value="cancel" formnovalidate>Cancelar</button><button value="save">Salvar</button></div>
+  </form>
+</dialog>
+</body>
+</html>
