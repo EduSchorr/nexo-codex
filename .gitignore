@@ -1,0 +1,34 @@
+# Runtime logs / state
+*.log
+*.pid
+*.tmp
+attachments/
+data/
+cache/
+
+# Authentication / environment
+.env
+.env.*
+*.token
+*.secret
+
+# Generated protocol snapshots
+protocol/
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.pytest_cache/
+
+# Browser / test output
+interface*.png
+screenshots/
+coverage/
+
+# IDE / OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
