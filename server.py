@@ -49,7 +49,9 @@ def scoped_rpc_params(method, params):
         if sandbox == 'workspace-write':
             params['cwd'] = personal_cwd(params.get('cwd'), folders)
             params['approvalPolicy'] = 'on-request'
-        elif sandbox != 'read-only':
+        elif sandbox == 'read-only':
+            params['approvalPolicy'] = 'on-request'
+        else:
             raise ValueError('Modo de acesso inválido para o Nexo.')
     elif method == 'turn/start':
         policy = params.get('sandboxPolicy') or {}
