@@ -1,3 +1,5 @@
+> **Language:** English · [Português (Brasil)](README.pt-BR.md)
+
 <div align="center">
 
 # Nexo
